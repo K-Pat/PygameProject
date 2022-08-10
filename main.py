@@ -1,5 +1,17 @@
 import pygame
 
+#Define keys for user input
+from pygame.locals import (
+    K_UP,
+    K_DOWN,
+    K_LEFT,
+    K_RIGHT,
+    K_ESCAPE,
+    KEYDOWN,
+    QUIT,
+
+)
+
 #initialize pygame
 pygame.init()
 
@@ -14,6 +26,10 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:#if user trys to exit
             running = False
+        if event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
+                running == False 
+            
     
     screen.fill((255,255,255))#fill screen with color (RGB values)
 
