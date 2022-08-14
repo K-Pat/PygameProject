@@ -25,18 +25,15 @@ while running:
     #check to see if exit condition is met
     for event in pygame.event.get():
         if event.type == pygame.QUIT:#if user trys to exit
-            running = False
+            running = True
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 running == False 
-            
+        elif event.type == QUIT:
+            running = False
+        
     
-    screen.fill((255,255,255))#fill screen with color (RGB values)
-
-    pygame.draw.circle(screen, #screen name
-    (0,0,255), #rgb color
-    (250,250), #center coordinate for circle
-    75)#radius
+    screen.fill((0,0,0))#fill screen with color (RGB values)
 
     #update the display
     pygame.display.flip()
