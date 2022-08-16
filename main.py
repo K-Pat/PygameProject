@@ -1,6 +1,8 @@
+# Import the pygame module
 import pygame
 
-#Define keys for user input
+# Import pygame.locals for easier access to key coordinates
+# Updated to conform to flake8 and black standards
 from pygame.locals import (
     K_UP,
     K_DOWN,
@@ -9,33 +11,54 @@ from pygame.locals import (
     K_ESCAPE,
     KEYDOWN,
     QUIT,
-
 )
 
-#initialize pygame
+# Define constants for the screen width and height
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 667
+
+bg = pygame.image.load("space.jpeg")
+
+# Define a player object by extending pygame.sprite.Sprite
+# The surface drawn on the screen is now an attribute of 'player'
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Player, self).__init__()
+        self.surf = pygame.Surface((25, 75))
+        self.surf.fill((255, 255, 255))
+        self.rect = self.surf.get_rect()
+
+# Initialize pygame
 pygame.init()
 
-#creating the screen (500 pixels X 500 pixels)
-screen = pygame.display.set_mode([500,500])
+# Create the screen object
+# The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-#create game loop condition
+# Instantiate player. Right now, this is just a rectangle.
+player = Player()
+
+# Variable to keep the main loop running
 running = True
-while running: 
 
-    #check to see if exit condition is met
+# Main loop
+while running:
+    # for loop through the event queue
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:#if user trys to exit
-            running = True
+        # Check for KEYDOWN event
         if event.type == KEYDOWN:
+            # If the Esc key is pressed, then exit the main loop
             if event.key == K_ESCAPE:
-                running == False 
+                running = False
+        # Check for QUIT event. If QUIT, then set running to false.
         elif event.type == QUIT:
             running = False
-        
-    
-    screen.fill((0,0,0))#fill screen with color (RGB values)
 
-    #update the display
+    # Fill the screen with black
+    screen.blit(bg, (0, 0))
+
+    # Draw the player on the screen
+    screen.blit(player.surf, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+
+    # Update the display
     pygame.display.flip()
-
-pygame.quit()
