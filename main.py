@@ -11,22 +11,23 @@ from pygame.locals import (
     K_ESCAPE,
     KEYDOWN,
     QUIT,
+    K_a,
+    K_d, 
 )
 
 # Define constants for the screen width and height
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 667
 
+velocity = 12
+
 bg = pygame.image.load("space.jpeg")
+
+sprite = pygame.image.load("rocket.jpeg")
+sprite = pygame.transform.scale(sprite, (50, 50))
 
 # Define a player object by extending pygame.sprite.Sprite
 # The surface drawn on the screen is now an attribute of 'player'
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super(Player, self).__init__()
-        self.surf = pygame.Surface((25, 75))
-        self.surf.fill((255, 255, 255))
-        self.rect = self.surf.get_rect()
 
 # Initialize pygame
 pygame.init()
@@ -35,14 +36,17 @@ pygame.init()
 # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# Instantiate player. Right now, this is just a rectangle.
-player = Player()
+x = SCREEN_WIDTH/2
+y = SCREEN_HEIGHT/2
 
 # Variable to keep the main loop running
 running = True
 
 # Main loop
 while running:
+    screen.blit(bg, (0, 0))
+    screen.blit(sprite, (x, y))
+
     # for loop through the event queue
     for event in pygame.event.get():
         # Check for KEYDOWN event
@@ -50,15 +54,20 @@ while running:
             # If the Esc key is pressed, then exit the main loop
             if event.key == K_ESCAPE:
                 running = False
+            if event.key == pygame.K_a:
+                x-=velocity
+            if event.key == pygame.K_d:
+                x+=velocity
         # Check for QUIT event. If QUIT, then set running to false.
         elif event.type == QUIT:
             running = False
 
-    # Fill the screen with black
-    screen.blit(bg, (0, 0))
+
+    
 
     # Draw the player on the screen
-    screen.blit(player.surf, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
+
 
     # Update the display
-    pygame.display.flip()
+    pygame.display.update()
+
