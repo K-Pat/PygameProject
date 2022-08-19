@@ -50,11 +50,13 @@ def score_display(text):
 def crash():
     m =0 
     x = 0
-    time.sleep(1)
+    time.sleep(0.5)
     message_display("Crash")
 
+running = True
+
 RANDOM_X = random.randint(20, 980)
-def game_loop(x):
+def game_loop(running):
     velocity = 12
 
 
@@ -84,7 +86,7 @@ def game_loop(x):
     y = SCREEN_HEIGHT-100
 
     # Variable to keep the main loop running
-    running = True
+
 
     # Main loop
     score = 0
@@ -143,11 +145,17 @@ def game_loop(x):
 
         if y < 50+m:
             if x > RANDOM_X and x < RANDOM_X+meteor_width or x+50 > RANDOM_X and x + 50 < RANDOM_X+meteor_width:
-                crash()
+                m =0 
+                x = 0
+                time.sleep(0.5)
+                message_display("Crash")
+                time.sleep(1)
                 score = 0
+                RANDOM_X = random.randint(20,700)
+                meteor_width = random.randint(80, 350)
 
         pygame.display.update()
         score+=1
         clock.tick(60)
 
-game_loop(True)
+game_loop(running)
