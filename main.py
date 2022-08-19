@@ -3,6 +3,7 @@ import pygame
 import random
 import threading
 import os
+import time
 
 clock = pygame.time.Clock()
 
@@ -20,103 +21,133 @@ from pygame.locals import (
     K_d, 
 )
 
-# Define constants for the screen width and height
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 667
 
-RANDOM_X = random.randint(20, 980)
-
-velocity = 12
-
-meteor = pygame.Surface((50,50))
-meteor.fill((110, 38, 14))
-bg = pygame.image.load("space.jpeg")
-
-sprite = pygame.image.load("rocket.jpeg")
-sprite = pygame.transform.scale(sprite, (50, 50))
-
-# Define a player object by extending pygame.sprite.Sprite
-# The surface drawn on the screen is now an attribute of 'player'
- 
-# Initialize pygame
-pygame.init()
-
-# Create the screen object
-# The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-x = SCREEN_WIDTH/2
-y = SCREEN_HEIGHT-100
 
-# Variable to keep the main loop running
-running = True
+def text_objects(text, font):
+    textSurface = font.render(text, True, (255,255,255))
+    return textSurface, textSurface.get_rect()
 
-# Main loop
+def message_display(text):
+    largeText = pygame.font.Font('freesansbold.ttf',115)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
+    screen.blit(TextSurf, TextRect)
 
-x_change = 0
-meteor_change = 0
-m = 0
-c = 0
+    pygame.display.update()
 
-def meteor_rain(x):
-    while x:
-        r = random.randint(20, 980)
-        screen.blit(meteor, (r, m))
+# Define constants for the screen width and height
+
+def score_display(text):
+    smallText = pygame.font.Font('freesansbold.ttf',20)
+    TextSurf, TextRect = text_objects(text, smallText)
+    TextRect.center = ((950),(20))
+    screen.blit(TextSurf, TextRect)
+
+def crash():
+    m =0 
+    x = 0
+    time.sleep(1)
+    message_display("Crash")
+
+RANDOM_X = random.randint(20, 980)
+def game_loop(x):
+    velocity = 12
+
+
+    RANDOM_X = random.randint(20, 980)
+    x_change = 0
+    meteor_change = 0
+    m = 0
+    c = 0
+    meteor_width = random.randint(80,350)
+    SCREEN_WIDTH = 1000
+    SCREEN_HEIGHT = 667
+    bg = pygame.image.load("space.jpeg")
+
+    sprite = pygame.image.load("rocket.jpeg")
+    sprite = pygame.transform.scale(sprite, (50, 50))
+
+    
+    # Initialize pygame
+    pygame.init()
+
+    pygame.display.set_caption("Han Solo")
+
+    # Create the screen object
+    # The size is determined by the constant SCREEN_WIDTH and SCREEN_HEIGHT
+
+    x = SCREEN_WIDTH/2
+    y = SCREEN_HEIGHT-100
+
+    # Variable to keep the main loop running
+    running = True
+
+    # Main loop
+    score = 0
+    while running:
+        meteor = pygame.Surface((meteor_width,50))
+        meteor.fill((110, 38, 14))
+        screen.blit(bg, (0, 0))
+        screen.blit(sprite, (x, y))
+        screen.blit(meteor, (RANDOM_X, m))
+        scoreString = str(score)
+        score_display(scoreString)
+        
+
+        # for loop through the event queue
+        for event in pygame.event.get():
+            # Check for KEYDOWN event
+            if event.type == KEYDOWN:
+                # If the Esc key is pressed, then exit the main loop
+                if event.key == K_ESCAPE:
+                    running = False
+                # If the 'a' key is pressed: Move the sprite left:
+                if event.key == K_a:
+                    x_change = -12 
+                # If the 'd' key is pressed: Move the sprite left:
+                if event.key == K_d:
+                    x_change = 12
+            if event.type == KEYUP:
+                if event.key == K_a or event.key == K_d:
+                    x_change = 0
+            # Check for QUIT event. If QUIT, then set running to false.
+            elif event.type == QUIT:
+                running = False
+        
+        x+=x_change
+
+        if x<0:
+            x=0
+        elif x>950:
+            x = 950
+        
         if c%97:
-            meteor_change = 5
+            meteor_change = 10
         else:
             meteor_change = 0 
-    
+        
         if c == 97:
             c = 0
-    
-    m+=meteor_change
-    c+=1
+        
+        m+=meteor_change
+        c+=1
 
-while running:
-    screen.blit(bg, (0, 0))
-    screen.blit(sprite, (x, y))
-    screen.blit(meteor, (RANDOM_X, m))
+        if m>SCREEN_HEIGHT:
+            m = 0-50
+            RANDOM_X = random.randint(20, 700)
+            meteor_width = random.randint(80,350)
 
-    # for loop through the event queue
-    for event in pygame.event.get():
-        # Check for KEYDOWN event
-        if event.type == KEYDOWN:
-            # If the Esc key is pressed, then exit the main loop
-            if event.key == K_ESCAPE:
-                running = False
-            # If the 'a' key is pressed: Move the sprite left:
-            if event.key == K_a:
-                x_change = -12 
-            # If the 'd' key is pressed: Move the sprite left:
-            if event.key == K_d:
-                x_change = 12
-        if event.type == KEYUP:
-            if event.key == K_a or event.key == K_d:
-                x_change = 0
-        # Check for QUIT event. If QUIT, then set running to false.
-        elif event.type == QUIT:
-            running = False
-    
-    x+=x_change
+        if y < 50+m:
+            if x > RANDOM_X and x < RANDOM_X+meteor_width or x+50 > RANDOM_X and x + 50 < RANDOM_X+meteor_width:
+                crash()
+                score = 0
 
-    if x<0:
-        x=0
-    elif x>950:
-        x = 950
-    
-    if c%97:
-        meteor_change = 5
-    else:
-        meteor_change = 0 
-    
-    if c == 97:
-        c = 0
-    
-    m+=meteor_change
-    c+=1
-    # Update the display
-    pygame.display.update()
-    
-    clock.tick(40)
+        pygame.display.update()
+        score+=1
+        clock.tick(60)
 
+game_loop(True)
