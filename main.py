@@ -37,7 +37,7 @@ def text_objects(text, font):
     return textSurface, textSurface.get_rect()
 
 def message_display(text):
-    largeText = pygame.font.Font('freesansbold.ttf',115)
+    largeText = pygame.font.Font('ARIALUNI.TTF',115)
     TextSurf, TextRect = text_objects(text, largeText)
     TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
     screen.blit(TextSurf, TextRect)
@@ -47,7 +47,7 @@ def message_display(text):
 # Define constants for the screen width and height
 
 def score_display(text):
-    smallText = pygame.font.Font('freesansbold.ttf',20)
+    smallText = pygame.font.Font('ARIALUNI.TTF',20)
     TextSurf, TextRect = text_objects(text, smallText)
     TextRect.center = ((950),(20))
     screen.blit(TextSurf, TextRect)
@@ -65,8 +65,8 @@ RANDOM_X = random.randint(20, 980)
 def start_menu(Display):
     running = True
     screen.fill((0,0,0))
-    largeText = pygame.font.Font('freesansbold.ttf',100)
-    smallText = pygame.font.Font('freesansbold.ttf',25)
+    largeText = pygame.font.Font('ARIALUNI.TTF',100)
+    smallText = pygame.font.Font('ARIALUNI.TTF',25)
     TextSurf, TextRect = text_objects(Display, largeText)
     TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
     screen.blit(TextSurf, TextRect)
@@ -116,10 +116,10 @@ def start_menu(Display):
 
 
 def score_dodged(count):
-    font = pygame.font.SysFont("freesansbold.ttf", 25)
+    font = pygame.font.SysFont("ARIALUNI.TTF", 25)
     s = "Dodged: " + str(count)
     x = font.render(s, True, (255,255,255))
-    smallText = pygame.font.Font('freesansbold.ttf',20)
+    smallText = pygame.font.Font('ARIALUNI.TTF',20)
     TextSurf, TextRect = text_objects(x, smallText)
     TextRect.center = ((15,15))
     screen.blit(TextSurf, TextRect)
