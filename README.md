@@ -8,6 +8,10 @@ In terminal reach this folder:
     to create a DMG: "python3 setup.py bdist_dmg"
     to create a Windows Installer: "python3 setup.py bdist_msi"
 
+required external packages:
+pygame
+cx_Freeze [For EXE conversion]
+
 Repo Link: 
 https://github.com/K-Pat/PygameProject 
 
