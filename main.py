@@ -62,12 +62,12 @@ running = True
 
 RANDOM_X = random.randint(20, 980)
 
-def start_menu():
+def start_menu(Display):
     running = True
     screen.fill((0,0,0))
     largeText = pygame.font.Font('freesansbold.ttf',100)
-    smallText = pygame.font.Font('freesansbold.ttf',30)
-    TextSurf, TextRect = text_objects("Roaming In Space", largeText)
+    smallText = pygame.font.Font('freesansbold.ttf',25)
+    TextSurf, TextRect = text_objects(Display, largeText)
     TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
     screen.blit(TextSurf, TextRect)
     button_no = pygame.Surface((150,50))
@@ -75,27 +75,42 @@ def start_menu():
     button_yes = pygame.Surface((150,50))
     button_yes.fill((255,0,0))
     
-    TextSurf_button1, TextRect_button1 = text_objects("PLAY", smallText)
+    TextSurf_button1, TextRect_button1 = text_objects('"A"', smallText)
     TextRect_button1.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
     TextRect_button1.center = ((SCREEN_HEIGHT/4+75,SCREEN_WIDTH/4+175+25))
 
 
-    TextSurf_button2, TextRect_button2 = text_objects("EXIT", smallText)
+    TextSurf_button2, TextRect_button2 = text_objects('"ESC"', smallText)
     TextRect_button2.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
     TextRect_button2.center = ((650+75,SCREEN_WIDTH/4+175+25))
     button_yes.fill((255,0,0))
     button_no.fill((0,255,0))
+
+    button_yes_collide = pygame.Rect((SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175), (150,50))
+    pygame.draw.rect(screen, (0,200,0), (SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175, 150, 50))
+    pygame.draw.rect(screen, (200,0,0), ((650),((SCREEN_WIDTH/4)+175), 150, 50))
+
     while running:
-        screen.blit(button_no, (SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175))
-        screen.blit(button_yes, (((650),((SCREEN_WIDTH/4)+175))))
+        #screen.blit(button_no, (SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175))
+        #screen.blit(button_yes, (((650),((SCREEN_WIDTH/4)+175))))
         screen.blit(TextSurf_button1, TextRect_button1)
         screen.blit(TextSurf_button2, TextRect_button2)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-
-
+            if event.type == pygame.KEYDOWN:
+                if event.key == K_a:
+                    pygame.draw.rect(screen, (0,255,0), (SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175, 150, 50))
+                if event.key == K_ESCAPE:
+                    pygame.draw.rect(screen, (255,0,0), ((650),((SCREEN_WIDTH/4)+175), 150, 50))
+            if event.type == pygame.KEYUP:
+                if event.key == K_a:
+                    pygame.draw.rect(screen, (0,200,0), (SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175, 150, 50))
+                    game_loop(True)
+                if event.key==K_ESCAPE:
+                    pygame.quit()
+                    quit()
         pygame.display.update()
         clock.tick(15)
 
@@ -193,19 +208,19 @@ def game_loop(running):
             if x > RANDOM_X and x < RANDOM_X+meteor_width or x+50 > RANDOM_X and x + 50 < RANDOM_X+meteor_width:
                 m =0 
                 x = 0
-                time.sleep(0.5)
+                #time.sleep(0.5)
                 message_display("Crash")
                 time.sleep(1)
                 score = 0
                 RANDOM_X = random.randint(20,700)
                 meteor_width = random.randint(80, 350)
-                message_display("Play Again?")
+                start_menu("Play Again?")
                 meteor_height = random.randint(30,75)
                 
 
         pygame.display.update()
         score+=1
+        print(pos)
         clock.tick(75)
 
-start_menu()
-game_loop(running)
+start_menu("Roaming In Space")
