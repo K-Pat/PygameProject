@@ -11,7 +11,6 @@ pygame.init()
 
 pygame.display.set_caption("Roaming In Space")
 
-pos = pygame.mouse.get_pos()
 
 # Import pygame.locals for easier access to key coordinates
 from pygame.locals import (
@@ -87,10 +86,12 @@ def start_menu(Display):
     button_no.fill((0,255,0))
 
     button_yes_collide = pygame.Rect((SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175), (150,50))
+    button_no_collide =  pygame.Rect((650,((SCREEN_WIDTH/4)+175)), (150, 50))
     pygame.draw.rect(screen, (0,200,0), (SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175, 150, 50))
     pygame.draw.rect(screen, (200,0,0), ((650),((SCREEN_WIDTH/4)+175), 150, 50))
 
     while running:
+        pos = pygame.mouse.get_pos()
         #screen.blit(button_no, (SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175))
         #screen.blit(button_yes, (((650),((SCREEN_WIDTH/4)+175))))
         screen.blit(TextSurf_button1, TextRect_button1)
@@ -111,6 +112,15 @@ def start_menu(Display):
                 if event.key==K_ESCAPE:
                     pygame.quit()
                     quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0] and button_yes_collide.collidepoint(pos):
+                    pygame.draw.rect(screen, (0,255,0), (SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175, 150, 50))
+                    game_loop(True)
+                if pygame.mouse.get_pressed()[0] and button_no_collide.collidepoint(pos):
+                    pygame.draw.rect(screen, (255,0,0), ((650),((SCREEN_WIDTH/4)+175), 150, 50))
+                    pygame.quit()
+                    quit()
+            
         pygame.display.update()
         clock.tick(15)
 
@@ -129,12 +139,19 @@ def game_loop(running):
 
 
     RANDOM_X = random.randint(20, 980)
+    RANDOM_X_TWO = random.randint(20,980)
     x_change = 0
+    x_change_TWO = 0
     meteor_change = 0
+    meteor_change_TWO = 0 
     m = 0
+    m_TWO = 667
     c = 0
+    c_TWO = 0
     meteor_width = random.randint(80,350)
     meteor_height = random.randint(30,75)
+    meteor_width_TWO = random.randint(80,350)
+    meteor_height_TWO = random.randint(30,75)
     SCREEN_WIDTH = 1000
     SCREEN_HEIGHT = 667
     bg = pygame.image.load("space.jpeg").convert_alpha()
@@ -150,10 +167,12 @@ def game_loop(running):
     while running:
         #score_dodged(dodged)
         meteor = pygame.Surface((meteor_width,meteor_height))
+        #meteor_TWO = pygame.Surface((meteor_width_TWO, meteor_height_TWO))
         meteor.fill((110, 38, 14))
         screen.blit(bg, (0, 0))
         screen.blit(sprite, (x, y))
         screen.blit(meteor, (RANDOM_X, m))
+        #screen.blit(meteor_TWO, (RANDOM_X, m_TWO))
         scoreString = str(score)
         score_display(scoreString)
         
@@ -194,6 +213,7 @@ def game_loop(running):
             c = 0
         
         m+=meteor_change
+        m_TWO-=meteor_change
         c+=1
 
         if m>SCREEN_HEIGHT:
@@ -201,6 +221,9 @@ def game_loop(running):
             RANDOM_X = random.randint(20, 700)
             meteor_width = random.randint(80,350)
             meteor_height = random.randint(30,75)
+            RANDOM_X_TWO = random.randint(20, 700)
+            meteor_width_TWO = random.randint(80,350)
+            meteor_height_TWO = random.randint(30,75)
             dodged+=1
 
 
@@ -216,11 +239,13 @@ def game_loop(running):
                 meteor_width = random.randint(80, 350)
                 start_menu("Play Again?")
                 meteor_height = random.randint(30,75)
+                RANDOM_X_TWO = random.randint(20, 700)
+                meteor_width_TWO = random.randint(80,350)
+                meteor_height_TWO = random.randint(30,75)
                 
 
         pygame.display.update()
         score+=1
-        print(pos)
         clock.tick(75)
 
 start_menu("Roaming In Space")
