@@ -2,6 +2,19 @@
  
 Helpful Links:
 
+EXE Update:
+In terminal, reach this folder: 
+    run command "python3 setup.py build"
+    to create a DMG: "python3 setup.py bdist_dmg"
+    to create a Windows Installer: "python3 setup.py bdist_msi"
+
+required external packages:
+pygame
+cx_Freeze [For EXE conversion]
+
+Reading and Writing to .txt files: 
+https://www.geeksforgeeks.org/reading-writing-text-files-python/
+
 Repo Link: 
 https://github.com/K-Pat/PygameProject 
 
