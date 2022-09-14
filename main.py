@@ -17,7 +17,7 @@ from pygame.locals import (
 
 # Define constants for the screen width and height
 SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 667
+SCREEN_HEIGHT = 668
 
 velocity = 12
 
