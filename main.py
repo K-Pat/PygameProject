@@ -315,7 +315,7 @@ def game_loop(running):
                 RANDOM_X_TWO = random.randint(20, 700)
                 meteor_width_TWO = random.randint(80,350)
                 meteor_height_TWO = random.randint(30,75)
-        
+                                                    
         #update
         pygame.display.update()
         #every iteration of the for loop increase the score by 1
