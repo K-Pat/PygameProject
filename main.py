@@ -218,10 +218,19 @@ def game_loop(running):
 
         #fill the meteor with brown
         meteor.fill((110, 38, 14))
+
+        #BLIT the starry sky backgroudn
         screen.blit(bg, (0, 0))
+
+        #BLIT the sprite at postion (x,y)
         screen.blit(sprite, (x, y))
+
+        #BLIT the meteor at a Random X value and at m which is the variable designated for the Y positon of the meteor
         screen.blit(meteor, (RANDOM_X, m))
+
         #screen.blit(meteor_TWO, (RANDOM_X, m_TWO))
+
+        #convert score value to a string so it can be displayed with the score_display function
         scoreString = str(score)
         score_display(scoreString)
         
@@ -245,56 +254,73 @@ def game_loop(running):
             elif event.type == QUIT:
                 running = False
         
+        #add the position change to the actual position value
         x+=x_change
 
+    #if the x-coordinate of the sprite goes below 0 (Off the screen) then we reset to 0 to bring it back. 
         if x<0:
             x=0
+    #same prinicple as the comment above but this is for the other side
         elif x>950:
             x = 950
         
+        #Variable C made to restrict the speed of the change for the y coordinate of the meteor
         if c%97:
             meteor_change = 10
         else:
             meteor_change = 0 
-        
         if c == 97:
             c = 0
         
+        #Adding the change in the y position for the meteor to the designated Y variable.
         m+=meteor_change
         m_TWO-=meteor_change
         c+=1
 
+        #Once the meteor goes off the screen. Then redefine all the variables to make the next meteor
         if m>SCREEN_HEIGHT:
             m = 0-50
             RANDOM_X = random.randint(20, 700)
             meteor_width = random.randint(80,350)
             meteor_height = random.randint(30,75)
             RANDOM_X_TWO = random.randint(20, 700)
-            meteor_width_TWO = random.randint(80,350)
-            meteor_height_TWO = random.randint(30,75)
+            #meteor_width_TWO = random.randint(80,350)
+            #meteor_height_TWO = random.randint(30,75)
             dodged+=1
 
-
+        #The next two if statments calculate if the sprite has collided with the meteor. 
+        #HOWEVER this is a little archaic IMO maybe we can use the collidepoint functions to do this much more easily. 
         if y < 50+m:
             if x > RANDOM_X and x < RANDOM_X+meteor_width or x+50 > RANDOM_X and x + 50 < RANDOM_X+meteor_width:
                 m =0 
                 x = 0
                 #time.sleep(0.5)
+                #Once we have established we have crashed
+                #display a crash message
                 message_display("Crash")
+                #keep displaying for one second
                 time.sleep(1)
+                #append the score to the scores list
                 scores.append(score)
+                #bubble sort the list to go from least to greatest
                 bubble_sort(scores)
+                #reset score
                 score = 0
+                #redefne the variables for another run
                 RANDOM_X = random.randint(20,700)
                 meteor_width = random.randint(80, 350)
+                #Go back to the start screen but with a different message this time.
                 start_menu("Play Again?")
                 meteor_height = random.randint(30,75)
                 RANDOM_X_TWO = random.randint(20, 700)
                 meteor_width_TWO = random.randint(80,350)
                 meteor_height_TWO = random.randint(30,75)
-                
+                                                    
+        #update
         pygame.display.update()
+        #every iteration of the for loop increase the score by 1
         score+=1
+        #limit fps to 75
         clock.tick(75)
 
 #Algorithm Functions
@@ -307,6 +333,7 @@ def score_dodged(count):
     TextRect.center = ((15,15))
     screen.blit(TextSurf, TextRect)
 
+#Bubble sort function
 def bubble_sort(args):
     n = len(args)
     swapped = False
@@ -319,6 +346,6 @@ def bubble_sort(args):
             return
 
 
-
+#create a main function
 if __name__ == "__main__":
     start_menu("Roaming In Space")
