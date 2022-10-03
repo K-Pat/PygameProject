@@ -5,10 +5,12 @@ import random
 import threading
 import os
 import time
+import Sprite
 from pygame.locals import (
     K_UP,
     K_DOWN,
     K_LEFT,
+    K_RIGHT,
     K_ESCAPE,
     KEYDOWN,
     KEYUP,
@@ -25,7 +27,6 @@ pygame.init()
 pygame.display.set_caption("Roaming In Space")
 #opening highscores.txt with handle at the first 
 highscores = open('highscores.txt', 'a+')
-
 #Variables 
 #Screen Width
 SCREEN_WIDTH = 1000
@@ -220,6 +221,9 @@ def game_loop(running):
 
         #BLIT the starry sky backgroudn
         screen.blit(bg, (0, 0))
+        
+        spriteTest = Sprite.Sprite("Rocket")
+        spriteTest.load_image("rocket.jpeg")
 
         #BLIT the sprite at postion (x,y)
         screen.blit(sprite, (x, y))
