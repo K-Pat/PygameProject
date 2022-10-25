@@ -19,6 +19,8 @@ from pygame.locals import (
     K_d, 
 )
 
+scores = []
+
 #initialization
 clock = pygame.time.Clock()
 #Initialize Pygame
@@ -26,7 +28,6 @@ pygame.init()
 #Setting a caption for the pygame screen
 pygame.display.set_caption("Roaming In Space")
 #opening highscores.txt with handle at the first 
-highscores = open('highscores.txt', 'a+')
 #Variables 
 #Screen Width
 SCREEN_WIDTH = 1000
@@ -97,6 +98,8 @@ def start_menu(Display):
     TextRect_button2.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
     TextRect_button2.center = ((650+75,SCREEN_WIDTH/4+175+25))
 
+    
+
     #fill both buttons. One is green, One is red. (RGB values) 
     #UNUSED
     button_yes.fill((255,0,0))
@@ -105,11 +108,12 @@ def start_menu(Display):
     #Creates hidden hitboxes for the buttons
     button_yes_collide = pygame.Rect((SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175), (150,50))
     button_no_collide =  pygame.Rect((650,((SCREEN_WIDTH/4)+175)), (150, 50))
+    button_scores_collide = pygame.Rect((405, ((SCREEN_WIDTH/4)+175), 150, 50))
 
     #creates visuals for the buttons
     pygame.draw.rect(screen, (0,200,0), (SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175, 150, 50))
     pygame.draw.rect(screen, (200,0,0), ((650),((SCREEN_WIDTH/4)+175), 150, 50))
-
+    pygame.draw.rect(screen, (200,200,0), (405, ((SCREEN_WIDTH/4)+175), 150, 50))
     while running:
         time.sleep(0.5)
         #constantly updating live position of mouse 
@@ -148,6 +152,8 @@ def start_menu(Display):
                 if event.key==K_ESCAPE:
                     pygame.quit()
                     quit()
+                if event.key==pygame.K_s:
+                    pass
             
             #if someone clicks a mouse button. 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -160,6 +166,9 @@ def start_menu(Display):
                     pygame.draw.rect(screen, (255,0,0), ((650),((SCREEN_WIDTH/4)+175), 150, 50))
                     pygame.quit()
                     quit()
+                if pygame.mouse.get_pressed()[0] and button_scores_collide.collidepoint(pos):
+                    pygame.draw.rect(screen, (255,255,0), (405, ((SCREEN_WIDTH/4)+175), 150, 50))
+
 
         #update
         pygame.display.update()
@@ -169,10 +178,10 @@ def start_menu(Display):
 
 #Main game loop
 def game_loop(running):
+    global scores
     #Velocity of the meteors
     velocity = 12
     #list for the highest scores
-    scores = []
     #random X value for the positioning of the meteor
     RANDOM_X = random.randint(20, 980)
     #random X value for the second meteor position on the X plane. 
@@ -208,7 +217,11 @@ def game_loop(running):
     score = 0
     #initial amount of meteor's dodged
     dodged = 0
-
+    scores.clear()
+    with open("highscores.txt") as scoresheet:
+        for i in scoresheet:
+            scores.append(i)
+    scoresheet = open('highscores.txt', 'w')
     while running:
         #score_dodged(dodged)
         
@@ -306,7 +319,12 @@ def game_loop(running):
                 #append the score to the scores list
                 scores.append(score)
                 #bubble sort the list to go from least to greatest
+                for i in range(len(scores)-1):
+                    scores[i] = int(scores[i])
                 bubble_sort(scores)
+                for i in scores:
+                    scoresheet.write(str(i)+'\n')
+                scoresheet.close()
                 #reset score
                 score = 0
                 #redefne the variables for another run
@@ -347,6 +365,13 @@ def bubble_sort(args):
                 args[j],args[j+1] = args[j+1],args[j]
         if not swapped:
             return
+
+def get_scores(scoresheet):
+    assert scoresheet.closed
+    global scores
+    with open("highscores.txt") as score_sheet:
+        for i in score_sheet:
+            scores.append(i)
 
 
 #create a main function
