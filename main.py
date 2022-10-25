@@ -66,11 +66,65 @@ def score_display(text):
 def scores_screen():
     running = True
     screen.fill((0,0,0))
+    scores=[]
+    with open("highscores.txt") as scoresheet:
+        for i in scoresheet:
+            scores.append(int(i))
     largeText = pygame.font.Font('ARIALUNI.TTF',100)
     smallText = pygame.font.Font('ARIALUNI.TTF',25)
-    TextSurf,TextRect = text_objects("High Score", largeText)
-    TextRect.center = ((10,10))
+    mediumText = pygame.font.Font('ARIALUNI.TTF', 45)
+    TextSurf, TextRect = text_objects("High Scores", largeText)
+    TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-250))
     screen.blit(TextSurf, TextRect)
+    pygame.draw.rect(screen, (0,200,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2+40, 150, 50))
+    button_main_collide = pygame.Rect((SCREEN_HEIGHT/2+97.5, ((SCREEN_WIDTH/4)+40), 150, 50))
+
+    TextSurf_button1, TextRect_button1 = text_objects('"A"', smallText)
+    TextRect_button1.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
+    TextRect_button1.center = ((SCREEN_HEIGHT/2+170,SCREEN_WIDTH/2+60))
+
+    TextSurf1, TextRect1 = text_objects(str(scores[0]), mediumText)
+    TextRect1.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-175))
+    screen.blit(TextSurf1,TextRect1)
+
+    TextSurf2, TextRect2 = text_objects(str(scores[1]), mediumText)
+    TextRect2.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-117.5))
+    screen.blit(TextSurf2,TextRect2)
+
+    TextSurf3, TextRect3 = text_objects(str(scores[2]), mediumText)
+    TextRect3.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-60))
+    screen.blit(TextSurf3,TextRect3)
+
+    TextSurf4, TextRect4 = text_objects(str(scores[3]), mediumText)
+    TextRect4.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-2.5))
+    screen.blit(TextSurf4,TextRect4)
+
+    TextSurf5, TextRect5 = text_objects(str(scores[4]), mediumText)
+    TextRect5.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2+58))
+    screen.blit(TextSurf5,TextRect5)
+
+    while running:
+        pos = pygame.mouse.get_pos()
+
+        screen.blit(TextSurf_button1,TextRect_button1)
+
+        for event in pygame.event.get():
+            if event.type==pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == K_a:
+                    pygame.draw.rect(screen, (0,255,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2+40, 150, 50))
+            if event.type==pygame.KEYUP:
+                if event.key == K_a:
+                    pygame.draw.rect(screen, (0,200,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2+40, 150, 50))
+                    start_menu("Roaming In Space")
+        
+        #update
+        pygame.display.update()
+        #lock FPS max at 15
+        clock.tick(15)
+        
 
 #Start Menu Screen
 def start_menu(Display):
@@ -98,7 +152,10 @@ def start_menu(Display):
     TextRect_button2.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
     TextRect_button2.center = ((650+75,SCREEN_WIDTH/4+175+25))
 
-    
+    #text for the scores button
+    TextSurf_button3, TextRect_button3 = text_objects('"S"', smallText)
+    TextRect_button3.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
+    TextRect_button3.center = ((405+75, ((SCREEN_WIDTH/4)+175+25)))
 
     #fill both buttons. One is green, One is red. (RGB values) 
     #UNUSED
@@ -114,6 +171,7 @@ def start_menu(Display):
     pygame.draw.rect(screen, (0,200,0), (SCREEN_HEIGHT/4,SCREEN_WIDTH/4+175, 150, 50))
     pygame.draw.rect(screen, (200,0,0), ((650),((SCREEN_WIDTH/4)+175), 150, 50))
     pygame.draw.rect(screen, (200,200,0), (405, ((SCREEN_WIDTH/4)+175), 150, 50))
+
     while running:
         time.sleep(0.5)
         #constantly updating live position of mouse 
@@ -124,6 +182,7 @@ def start_menu(Display):
         #BLIT the text that was defined earlier in the function
         screen.blit(TextSurf_button1, TextRect_button1)
         screen.blit(TextSurf_button2, TextRect_button2)
+        screen.blit(TextSurf_button3, TextRect_button3)
 
         #monitoring for events
         for event in pygame.event.get():
@@ -153,7 +212,7 @@ def start_menu(Display):
                     pygame.quit()
                     quit()
                 if event.key==pygame.K_s:
-                    pass
+                    scores_screen()
             
             #if someone clicks a mouse button. 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -168,6 +227,7 @@ def start_menu(Display):
                     quit()
                 if pygame.mouse.get_pressed()[0] and button_scores_collide.collidepoint(pos):
                     pygame.draw.rect(screen, (255,255,0), (405, ((SCREEN_WIDTH/4)+175), 150, 50))
+                    scores_screen()
 
 
         #update
@@ -360,7 +420,7 @@ def bubble_sort(args):
     swapped = False
     for i in range(n-1):
         for j in range(0,n-i-1):
-            if args[j] > args[j+1]:
+            if args[j] < args[j+1]:
                 swapped = True
                 args[j],args[j+1] = args[j+1],args[j]
         if not swapped:
