@@ -62,6 +62,10 @@ def score_display(text):
     TextRect.center = ((950),(20))
     screen.blit(TextSurf, TextRect)
 
+def reset_scores():
+    with open("highscores.txt", 'w') as scoresheet: 
+        pass
+
 #High Score Screen
 def scores_screen():
     running = True
@@ -76,37 +80,47 @@ def scores_screen():
     TextSurf, TextRect = text_objects("High Scores", largeText)
     TextRect.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-250))
     screen.blit(TextSurf, TextRect)
+
+    pygame.draw.rect(screen, (200,0,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2-20, 150, 50))
+    button_reset_collide = pygame.Rect((SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2-20, 150, 50))
+
     pygame.draw.rect(screen, (0,200,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2+40, 150, 50))
     button_main_collide = pygame.Rect((SCREEN_HEIGHT/2+97.5, ((SCREEN_WIDTH/4)+40), 150, 50))
 
+    
     TextSurf_button1, TextRect_button1 = text_objects('"A"', smallText)
     TextRect_button1.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
     TextRect_button1.center = ((SCREEN_HEIGHT/2+170,SCREEN_WIDTH/2+60))
 
-    TextSurf1, TextRect1 = text_objects(str(scores[0]), mediumText)
-    TextRect1.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-175))
-    screen.blit(TextSurf1,TextRect1)
-
-    TextSurf2, TextRect2 = text_objects(str(scores[1]), mediumText)
-    TextRect2.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-117.5))
-    screen.blit(TextSurf2,TextRect2)
-
-    TextSurf3, TextRect3 = text_objects(str(scores[2]), mediumText)
-    TextRect3.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-60))
-    screen.blit(TextSurf3,TextRect3)
-
-    TextSurf4, TextRect4 = text_objects(str(scores[3]), mediumText)
-    TextRect4.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-2.5))
-    screen.blit(TextSurf4,TextRect4)
-
-    TextSurf5, TextRect5 = text_objects(str(scores[4]), mediumText)
-    TextRect5.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2+58))
-    screen.blit(TextSurf5,TextRect5)
+    TextSurf_button2, TextRect_button2 = text_objects('"Reset"', smallText)
+    TextRect_button2.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
+    TextRect_button2.center = ((SCREEN_HEIGHT/2+170,SCREEN_WIDTH/2+5))
+    if len(scores) >=1:
+        TextSurf1, TextRect1 = text_objects(str(scores[0]), mediumText)
+        TextRect1.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-175))
+        screen.blit(TextSurf1,TextRect1)
+    if len(scores) >=2:
+        TextSurf2, TextRect2 = text_objects(str(scores[1]), mediumText)
+        TextRect2.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-117.5))
+        screen.blit(TextSurf2,TextRect2)
+    if len(scores) >=3:
+        TextSurf3, TextRect3 = text_objects(str(scores[2]), mediumText)
+        TextRect3.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-60))
+        screen.blit(TextSurf3,TextRect3)
+    if len(scores) >=4:
+        TextSurf4, TextRect4 = text_objects(str(scores[3]), mediumText)
+        TextRect4.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-2.5))
+        screen.blit(TextSurf4,TextRect4)
+    if len(scores) >=5:
+        TextSurf5, TextRect5 = text_objects(str(scores[4]), mediumText)
+        TextRect5.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2+58))
+        screen.blit(TextSurf5,TextRect5)
 
     while running:
         pos = pygame.mouse.get_pos()
 
         screen.blit(TextSurf_button1,TextRect_button1)
+        screen.blit(TextSurf_button2, TextRect_button2)
 
         for event in pygame.event.get():
             if event.type==pygame.QUIT:
@@ -115,9 +129,23 @@ def scores_screen():
             if event.type == pygame.KEYDOWN:
                 if event.key == K_a:
                     pygame.draw.rect(screen, (0,255,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2+40, 150, 50))
+                if event.key == pygame.K_r:
+                    pygame.draw.rect(screen, (255,0,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2-20, 150, 50))
             if event.type==pygame.KEYUP:
                 if event.key == K_a:
                     pygame.draw.rect(screen, (0,200,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2+40, 150, 50))
+                    start_menu("Roaming In Space")
+                if event.key == pygame.K_r:
+                    pygame.draw.rect(screen, (200,0,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2-20, 150, 50))
+                    reset_scores()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                #if its a left click and the pos of the mouse collides with the invisble RECT for the YES button then engage game loop
+                if pygame.mouse.get_pressed()[0] and button_reset_collide.collidepoint(pos):
+                    pygame.draw.rect(screen, (255,0,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2-20, 150, 50))
+                    reset_scores()
+                #if its a left click and the pos of the mouse collides with the invisible RECT for the NO button then enngage quit sequence
+                if pygame.mouse.get_pressed()[0] and button_main_collide.collidepoint(pos):
+                    pygame.draw.rect(screen, (0,255,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2+40, 150, 50))
                     start_menu("Roaming In Space")
         
         #update
@@ -141,7 +169,7 @@ def start_menu(Display):
     button_no.fill((0,255,0))
     button_yes = pygame.Surface((150,50))
     button_yes.fill((255,0,0))
-    
+
     #Text for the yes button
     TextSurf_button1, TextRect_button1 = text_objects('"A"', smallText)
     TextRect_button1.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
