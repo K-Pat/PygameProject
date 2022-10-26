@@ -86,7 +86,6 @@ def scores_screen():
 
     pygame.draw.rect(screen, (0,200,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2+40, 150, 50))
     button_main_collide = pygame.Rect((SCREEN_HEIGHT/2+97.5, ((SCREEN_WIDTH/4)+40), 150, 50))
-
     
     TextSurf_button1, TextRect_button1 = text_objects('"A"', smallText)
     TextRect_button1.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
@@ -95,28 +94,31 @@ def scores_screen():
     TextSurf_button2, TextRect_button2 = text_objects('"Reset"', smallText)
     TextRect_button2.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2))
     TextRect_button2.center = ((SCREEN_HEIGHT/2+170,SCREEN_WIDTH/2+5))
-    if len(scores) >=1:
-        TextSurf1, TextRect1 = text_objects(str(scores[0]), mediumText)
-        TextRect1.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-175))
-        screen.blit(TextSurf1,TextRect1)
-    if len(scores) >=2:
-        TextSurf2, TextRect2 = text_objects(str(scores[1]), mediumText)
-        TextRect2.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-117.5))
-        screen.blit(TextSurf2,TextRect2)
-    if len(scores) >=3:
-        TextSurf3, TextRect3 = text_objects(str(scores[2]), mediumText)
-        TextRect3.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-60))
-        screen.blit(TextSurf3,TextRect3)
-    if len(scores) >=4:
-        TextSurf4, TextRect4 = text_objects(str(scores[3]), mediumText)
-        TextRect4.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-2.5))
-        screen.blit(TextSurf4,TextRect4)
-    if len(scores) >=5:
-        TextSurf5, TextRect5 = text_objects(str(scores[4]), mediumText)
-        TextRect5.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2+58))
-        screen.blit(TextSurf5,TextRect5)
+
+
+
 
     while running:
+        if len(scores) >=1:
+            TextSurf1, TextRect1 = text_objects(str(scores[0]), mediumText)
+            TextRect1.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-175))
+            screen.blit(TextSurf1,TextRect1)
+        if len(scores) >=2:
+            TextSurf2, TextRect2 = text_objects(str(scores[1]), mediumText)
+            TextRect2.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-117.5))
+            screen.blit(TextSurf2,TextRect2)
+        if len(scores) >=3:
+            TextSurf3, TextRect3 = text_objects(str(scores[2]), mediumText)
+            TextRect3.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-60))
+            screen.blit(TextSurf3,TextRect3)
+        if len(scores) >=4:
+            TextSurf4, TextRect4 = text_objects(str(scores[3]), mediumText)
+            TextRect4.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2-2.5))
+            screen.blit(TextSurf4,TextRect4)
+        if len(scores) >=5:
+            TextSurf5, TextRect5 = text_objects(str(scores[4]), mediumText)
+            TextRect5.center = ((SCREEN_WIDTH/2),(SCREEN_HEIGHT/2+58))
+            screen.blit(TextSurf5,TextRect5)
         pos = pygame.mouse.get_pos()
 
         screen.blit(TextSurf_button1,TextRect_button1)
@@ -126,6 +128,7 @@ def scores_screen():
             if event.type==pygame.QUIT:
                 pygame.quit()
                 quit()
+                #comment to test
             if event.type == pygame.KEYDOWN:
                 if event.key == K_a:
                     pygame.draw.rect(screen, (0,255,0), (SCREEN_HEIGHT/2+97.5,SCREEN_WIDTH/2+40, 150, 50))
