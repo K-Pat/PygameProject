@@ -6,6 +6,8 @@ import threading
 import os
 import time
 import Sprite
+import pandas as pd
+import csv
 from pygame.locals import (
     K_UP,
     K_DOWN,
@@ -464,6 +466,19 @@ def get_scores(scoresheet):
         for i in score_sheet:
             scores.append(i)
 
+def find_setting(name):
+    x=None
+    with open('settings.csv') as csvfile:
+        csvfilereader = csv.reader(csvfile)
+        for i in csvfilereader:
+            if name in i:
+                x = next(csvfilereader)
+    if not(x==None):
+        return x
+    else:
+        return None
+def update_setting(setting_name, new_value):
+    pass
 
 #create a main function
 if __name__ == "__main__":
